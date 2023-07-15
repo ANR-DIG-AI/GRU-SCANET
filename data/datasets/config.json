@@ -1,0 +1,10 @@
+{
+    "BC2GM": "Gene/Protein",
+    "BC4CHEMD": "Drug/Chem",
+    "BC5CDR-chem": "Drug/Chem",
+    "BC5CDR-disease": "Desease",
+    "JNLPBA": "Gene/Protein",
+    "linnaeus": "Species",
+    "NCBI-disease": "Desease",
+    "s800": "Species"
+}

@@ -1,0 +1,40 @@
+Dataset NCBI-disease is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9225851410286584, 0.9357920647503025, 0.9291416740868546)
+[ITER] : precision, recall, F1-Score (0.9313954024592166, 0.9371271225332721, 0.9342524714288187)
+Dataset NCBI-disease has finished 100% !
+Dataset BC5CDR-disease is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9202835589172517, 0.9412530969834743, 0.9306502208141654)
+[ITER] : precision, recall, F1-Score (0.923179599983701, 0.9413126952908824, 0.932157971047275)
+Dataset BC5CDR-disease has finished 100% !
+Dataset BC5CDR-chem is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9325145728513091, 0.9407592824363789, 0.9366187842111712)
+[ITER] : precision, recall, F1-Score (0.9347984263236855, 0.944335180880863, 0.9395426037031466)
+Dataset BC5CDR-chem has finished 100% !
+Dataset BC4CHEMD is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9276252247493726, 0.9287580042914829, 0.9281912689049668)
+[ITER] : precision, recall, F1-Score (0.9194196623021913, 0.9295509712155259, 0.9244575598495717)
+Dataset BC4CHEMD has finished 100% !
+Dataset BC2GM is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.8913591132928431, 0.9006784718898679, 0.8959945602746401)
+[ITER] : precision, recall, F1-Score (0.8904122766226925, 0.8973846457025422, 0.8938848651187998)
+Dataset BC2GM has finished 100% !
+Dataset JNLPBA is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.8413911183458972, 0.8298823509337702, 0.8355971086510948)
+[ITER] : precision, recall, F1-Score (0.833042472566672, 0.8184587033861431, 0.8256861961592512)
+Dataset JNLPBA has finished 100% !
+Dataset linnaeus is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9849741911987292, 0.9729007105041704, 0.9789002245363376)
+[ITER] : precision, recall, F1-Score (0.9875358234310765, 0.9313037272175293, 0.9585958271615967)
+Dataset linnaeus has finished 100% !
+Dataset s800 is running ... 0%
+Model: biogrut
+[ITER] : precision, recall, F1-Score (0.9532416448637584, 0.9610658504748616, 0.9571377580245968)
+[ITER] : precision, recall, F1-Score (0.9393365356568643, 0.9607957870099474, 0.9499449857018086)
+Dataset s800 has finished 100% !
