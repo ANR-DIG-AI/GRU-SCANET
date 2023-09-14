@@ -3,7 +3,7 @@ import train
 from arguments import TransformerCRFArguments as arg
 from train import add_line
 
-datasets = [ 'NCBI-disease', 'BC5CDR-disease', 'BC5CDR-chem','BC4CHEMD',  'BC2GM', 'JNLPBA', 'linnaeus', 's800']
+datasets = [ 'NCBI-disease'] #, 'BC5CDR-disease', 'BC5CDR-chem','BC4CHEMD',  'BC2GM', 'JNLPBA', 'linnaeus', 's800']
 if __name__ == '__main__':
     for dataset in datasets :
         _in = 'Dataset ' + dataset + ' is running ... 0%'

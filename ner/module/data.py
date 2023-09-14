@@ -35,6 +35,17 @@ class DataProcessing:
             return sens, ents
 
     @staticmethod
+    def read_text_file(file_name):
+        try:
+            with open(file_name, 'r', encoding='utf-8') as file:
+                content = file.read()
+                words = content.split()  # Split the content into words using space as a separator
+                return words
+        except FileNotFoundError:
+            print("The specified file was not found.")
+            return []
+        
+    @staticmethod
     def build_lookup(tokens, **extra_signs):
         """Build lookup table for given tokens and possible extra signs
 
