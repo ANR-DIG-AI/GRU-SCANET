@@ -6,6 +6,7 @@ import os
 import pandas as pd
 
 from module import data
+from extract_data import ExtractFeatureData
 
 class ReverseData:
     
@@ -81,19 +82,31 @@ class DataProcessingMaster:
         arg.raw_data_train = arg.raw_data_dir + 'train.csv'
         arg.raw_data_val = arg.raw_data_dir + 'devel.csv'
         arg.raw_data_test = arg.raw_data_dir + 'test.csv'
+        arg.whole_world_corpora = arg.whole_world_corpora # corpora path
         # ReverseData(path=arg.gold_data_dir).run()
+        
+        
+        # Read external corpora
+        whole_world_corpora = [] # 
+                    
         # Read original csv files
         sens_train, ents_train = DataProcessing.read_csv(arg.raw_data_train)
         sens_val, ents_val = DataProcessing.read_csv(arg.raw_data_val)
-        sens_test, _ = DataProcessing.read_csv(arg.raw_data_test, is_test=True)
+        sens_test, ents_test = DataProcessing.read_csv(arg.raw_data_test) #, is_test=True)
 
+        # load tokenizer BioBert
+        whole_world_corpora = ExtractFeatureData(input_path='').get_from_pmc()
+
+        # whole_world_corpora = DataProcessing.read_text_file(arg.whole_world_corpora)
+        # print("Nombre total de mots dans le corpus :", len(whole_world_corpora))
+        # exit()
         # Build Word-to-Index table
-        word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test)))
+        word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test + whole_world_corpora)))
         extra_sign_dict = {sign: idx for sign, idx in [arg.word_pad, arg.word_oov]}
         word2idx = DataProcessing.build_lookup(word_list, **extra_sign_dict)
-        
+        print('\n Tokens size : ', len(word_list), '\n')
         # Build Entity-to-Index table
-        entity_list = list(set(itertools.chain.from_iterable(ents_train + ents_val)))
+        entity_list = list(set(itertools.chain.from_iterable(ents_train + ents_val + ents_test)))
         extra_sign_dict = {sign: idx for sign, idx in [arg.entity_pad, arg.entity_bos, arg.entity_eos]}
         entity2idx = DataProcessing.build_lookup(entity_list, **extra_sign_dict)
         
@@ -101,8 +114,10 @@ class DataProcessingMaster:
         sens_train = [[word2idx[w] for w in sentence] for sentence in sens_train]
         sens_val = [[word2idx[w] for w in sentence] for sentence in sens_val]
         sens_test = [[word2idx[w] for w in sentence] for sentence in sens_test]
+        
         ents_train = [[entity2idx[e] for e in ents] for ents in ents_train]
         ents_val = [[entity2idx[e] for e in ents] for ents in ents_val]
+        ents_test = [[entity2idx[e] for e in ents] for ents in ents_test]
         
         # Pad sequences
         train_seq_len = max(len(sen) for sen in sens_train)
@@ -115,6 +130,7 @@ class DataProcessingMaster:
 
         test_seq_len = max(len(sen) for sen in sens_test)
         sens_test_pad = DataProcessing.pad_sequence(sens_test, test_seq_len, word2idx[arg.word_pad[0]])
+        ents_test_pad = DataProcessing.pad_sequence(ents_test, test_seq_len, entity2idx[arg.entity_pad[0]])
         
         # Store relevant data to file
         lookup = dict()
@@ -130,6 +146,7 @@ class DataProcessingMaster:
         dataset['sens_test'] = sens_test
         dataset['ents_train'] = ents_train
         dataset['ents_val'] = ents_val
+        dataset['ents_test'] = ents_test
 
         with open(arg.dataset_path, 'wb') as fout:
             pickle.dump(dataset, fout)
@@ -140,6 +157,8 @@ class DataProcessingMaster:
         padded['sens_val'] = sens_val_pad
         padded['ents_val'] = ents_val_pad
         padded['sens_test'] = sens_test_pad
+        padded['ents_test'] = ents_test_pad
+        
 
         with open(arg.padded_dataset_path, 'wb') as fout:
             pickle.dump(padded, fout)
@@ -157,7 +176,7 @@ class DataProcessingTrans:
         # Read original csv files
         sens_train, ents_train = DataProcessing.read_csv(arg.raw_data_train)
         sens_val, ents_val = DataProcessing.read_csv(arg.raw_data_val)
-        sens_test, _ = DataProcessing.read_csv(arg.raw_data_test, is_test=True)
+        sens_test, ents_test = DataProcessing.read_csv(arg.raw_data_test, is_test=True)
 
         # Build Word-to-Index lookup table
         word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test)))
@@ -175,17 +194,20 @@ class DataProcessingTrans:
         sens_test = [[word2idx[w] for w in sentence] for sentence in sens_test]
         ents_train = [[entity2idx[e] for e in ents] for ents in ents_train]
         ents_val = [[entity2idx[e] for e in ents] for ents in ents_val]
+        ents_test = [[entity2idx[e] for e in ents] for ents in ents_test]
         
         # Pad sequences
         train_seq_len = max(len(sen) for sen in sens_train)
         sens_train_pad = DataProcessing.pad_sequence(sens_train, train_seq_len, word2idx[arg.word_pad[0]])
         ents_train_pad = DataProcessing.pad_sequence(ents_train, train_seq_len, entity2idx[arg.entity_pad[0]])
+        
         val_seq_len = max(len(sen) for sen in sens_val)
         sens_val_pad = DataProcessing.pad_sequence(sens_val, val_seq_len, word2idx[arg.word_pad[0]])
         ents_val_pad = DataProcessing.pad_sequence(ents_val, val_seq_len, entity2idx[arg.entity_pad[0]])
 
         test_seq_len = max(len(sen) for sen in sens_test)
         sens_test_pad = DataProcessing.pad_sequence(sens_test, test_seq_len, word2idx[arg.word_pad[0]])
+        ents_test_pad = DataProcessing.pad_sequence(ents_test, test_seq_len, entity2idx[arg.entity_pad[0]])
         
         # Store relevant data to file
         lookup = dict()
@@ -201,6 +223,7 @@ class DataProcessingTrans:
         dataset['sens_test'] = sens_test
         dataset['ents_train'] = ents_train
         dataset['ents_val'] = ents_val
+        dataset['ents_test'] = ents_test
 
         with open(arg.dataset_path, 'wb') as fout:
             pickle.dump(dataset, fout)
@@ -211,6 +234,7 @@ class DataProcessingTrans:
         padded['sens_val'] = sens_val_pad
         padded['ents_val'] = ents_val_pad
         padded['sens_test'] = sens_test_pad
+        padded['ents_test'] = ents_test_pad
 
         with open(arg.padded_dataset_path, 'wb') as fout:
             pickle.dump(padded, fout)

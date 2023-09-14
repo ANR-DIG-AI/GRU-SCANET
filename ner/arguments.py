@@ -19,6 +19,8 @@ class Arguments:
     raw_data_train = raw_data_dir + 'train.csv'
     raw_data_val = raw_data_dir + 'devel.csv'
     raw_data_test = raw_data_dir + 'test.csv'
+    
+    whole_world_corpora = '../data/corpus/to_process/'
 
     data_dir = '../data/pkl/'
     dataset_path = data_dir + 'dataset.pkl'
