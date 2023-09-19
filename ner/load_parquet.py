@@ -10,11 +10,12 @@ class ParquetToCSVConverter:
 
     def extract_words(self,text):
         words = self.clean_string(text).split()
-        return [ w for w in words if w.strip()]
+        return [ w for w in words if len(w.strip())>0]
     
     def clean_string(self, value):
-        value = re.sub(r'[\[\];\(\)\/&;_@\'\"\.\-\+]', ' ', value)
+        value = re.sub(r'[\[\];\(\)\/&;_@=\'\"\.\-\+]', ' ', value)
         # value = value.rstrip('. ')
+        value = re.sub(r'\d+', ' ', value)
         return value
     
     def save_json(self, response_json, file_name):
