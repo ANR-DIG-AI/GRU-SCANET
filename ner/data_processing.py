@@ -95,10 +95,10 @@ class DataProcessingMaster:
         sens_test, ents_test = DataProcessing.read_csv(arg.raw_data_test) #, is_test=True)
 
         # load tokenizer BioBert
-        whole_world_corpora = ExtractFeatureData(input_path='').get_from_pmc()
+        whole_world_corpora = ExtractFeatureData(input_path='').get_tokens()
 
         # whole_world_corpora = DataProcessing.read_text_file(arg.whole_world_corpora)
-        # print("Nombre total de mots dans le corpus :", len(whole_world_corpora))
+        print("Total count of tokens :", len(whole_world_corpora))
         # exit()
         # Build Word-to-Index table
         word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test + whole_world_corpora)))

@@ -12,6 +12,20 @@ class ExtractFeatureData:
         self.input_path = input_path
         self.specific_tag = ['ArticleTitle', 'AbstractText']
 
+    def get_tokens(self) :
+        json_file_path = "../data/corpus/vocabulary.json"
+        try:
+            with open(json_file_path, 'r') as file:
+                data = json.load(file)
+                if isinstance(data, dict):
+                    return list(data.keys())
+                else:
+                    return []
+        except FileNotFoundError:
+            return []
+        except json.JSONDecodeError:
+            return []
+        
     def recursive_search(self, dictionary, value_list):
         if not value_list:
             return None
@@ -82,7 +96,7 @@ class ExtractFeatureData:
 
     def get_from_pmc(self):
         all_words = []
-        dataset = load_dataset("pubmed")
+        dataset = load_dataset("pmc/open_access")
         for example in dataset["train"]:
             title = example["title"]
             abstract = example["abstract"]
