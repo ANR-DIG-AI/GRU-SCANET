@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import json
+import re
 
 class ParquetToCSVConverter:
     def __init__(self, input_dir, output_dir):
@@ -8,8 +9,13 @@ class ParquetToCSVConverter:
         self.output_dir = output_dir
 
     def extract_words(self,text):
-        words = text.split()
-        return words
+        words = self.clean_string(text).split()
+        return [ w for w in words if w.strip()]
+    
+    def clean_string(self, value):
+        value = re.sub(r'[\[\];\(\)\/&;_@\'\"\.\-\+]', ' ', value)
+        # value = value.rstrip('. ')
+        return value
     
     def save_json(self, response_json, file_name):
         try:
@@ -35,7 +41,7 @@ class ParquetToCSVConverter:
                 csv_file_path = os.path.join(self.output_dir, csv_file_name)
 
                 df.to_csv(csv_file_path, index=False)
-                print(f"Conversion from {file_name} to {csv_file_name} terminée.")
+                print(f"Conversion from {file_name} to {csv_file_name} ended.")
         file_name = self.output_dir + 'vocabulary.json'
         print("Total count of tokens :", len(list(vocabulary.keys())))
         self.save_json(vocabulary, file_name)
