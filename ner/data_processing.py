@@ -101,7 +101,8 @@ class DataProcessingMaster:
         print("Total count of tokens :", len(whole_world_corpora))
         # exit()
         # Build Word-to-Index table
-        word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test + whole_world_corpora)))
+        word_list = list(set(itertools.chain.from_iterable(sens_train + sens_val + sens_test)))
+        word_list = list(set(word_list + whole_world_corpora))        
         extra_sign_dict = {sign: idx for sign, idx in [arg.word_pad, arg.word_oov]}
         word2idx = DataProcessing.build_lookup(word_list, **extra_sign_dict)
         print('\n Tokens size : ', len(word_list), '\n')
