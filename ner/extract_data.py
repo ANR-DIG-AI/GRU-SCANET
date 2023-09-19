@@ -82,10 +82,13 @@ class ExtractFeatureData:
 
     def get_from_pmc(self):
         all_words = []
-        dataset = load_dataset("pmc/open_access")
+        dataset = load_dataset("pubmed")
         for example in dataset["train"]:
-            text = example["body_text"]
-            words = self.extract_words(text)
+            title = example["title"]
+            abstract = example["abstract"]
+            words = self.extract_words(title)
+            all_words.extend(words)
+            words = self.extract_words(abstract)
             all_words.extend(words)
         return all_words
     
