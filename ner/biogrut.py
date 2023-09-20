@@ -7,7 +7,6 @@ from module import build_model, EarlyStopping, cal_f1score, DataLoader, load_emb
 
 
 tests = ['NCBI-disease', 'BC5CDR-disease', 'BC5CDR-chem','BC4CHEMD',  'BC2GM', 'JNLPBA', 'linnaeus', 's800']
-# tests = ['NCBI-disease'] #
 if __name__ == '__main__':
     arg.num_epochs = 2
     dataset = 'LLM'
@@ -24,8 +23,9 @@ if __name__ == '__main__':
     labels = read_labels()
     for i in range(len(tests)) :
         test_set = tests[i]
+        _label = labels[test_set]
         test_set = arg.raw_data_test.replace('//','/'+test_set+'/')
-        run_test(labels[test_set],test_set, arg)
+        run_test(_label,test_set, arg)
         out = 'Dataset ' + test_set + ' has finished 100% !'
         print(out)
         add_line(file_name='../result/logs/logs.txt', lines=[out])

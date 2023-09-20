@@ -9,7 +9,7 @@ from module import build_model, EarlyStopping, cal_f1score, DataLoader, load_emb
 import json
 
 def read_labels():
-    filename = '../data/labels.json'
+    filename = '../data/processed/labels.json'
     remove = '../data/processed/'
     output = {}
     try:
@@ -17,6 +17,7 @@ def read_labels():
             data = json.load(file)
             for key in data:
                 output[key.replace(remove,'')] = data[key]
+            print(output)
             return output
     except FileNotFoundError:
         return {}
