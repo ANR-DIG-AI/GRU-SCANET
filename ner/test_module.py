@@ -1,6 +1,5 @@
 import os
 import csv
-import pickle
 from module.data import DataProcessing
 
 import torch
@@ -28,20 +27,13 @@ def adapter(order=0, value=''):
         return value
     return expected[value]
 
-def run_test(order, test_set, arg, model):
+def run_test(order, test_set, arg, model, lookup):
     sens_test, ents_test = DataProcessing.read_csv(test_set)
     
-    print('Look up', arg.lookup_path)
-    with open(arg.lookup_path, 'rb') as fin:
-        lookup = pickle.load(fin)
-
     word2idx = lookup['word2idx']
     entity2idx = lookup['entity2idx']
-    
     # idx2entity = {idx: ent for ent, idx in entity2idx.items()}
     # o_entity = entity2idx['O']
-    arg.num_vocabs = len(word2idx)
-    arg.num_entities = len(entity2idx)
     print('Count of entities : ', arg.num_entities)
     print(entity2idx)
     test_sens = [ [word2idx[_sen] for _sen in sen] for sen in sens_test] # dataset['sens_test']  
