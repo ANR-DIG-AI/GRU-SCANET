@@ -42,7 +42,7 @@ def run_test(order, test_set, arg):
     test_ents = [[entity2idx[adapter(order=order,value=ent)] for ent in ents] for ents in ents_test]
     arg.num_vocabs = len(word2idx)
     arg.num_entities = len(entity2idx)
-
+    print('Count of entities : ', arg.num_entities)
     model = build_model(arg.model_name, arg).to(arg.device)
 
     # Load existed weights
