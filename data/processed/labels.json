@@ -1,0 +1,10 @@
+{
+    "../data/processed/BC2GM": 0,
+    "../data/processed/BC5CDR-chem": 1,
+    "../data/processed/s800": 2,
+    "../data/processed/BC4CHEMD": 5,
+    "../data/processed/BC5CDR-disease": 6,
+    "../data/processed/linnaeus": 7,
+    "../data/processed/JNLPBA": 9,
+    "../data/processed/NCBI-disease": 10
+}

@@ -14,7 +14,7 @@ class Arguments:
     gold_data_val = 'devel.tsv'
     gold_data_test = 'test.tsv'
     
-    choosen_dataset = 'BC2GM'
+    choosen_dataset = 'LLM' # 'BC2GM'
     raw_data_dir = '../data/processed/' + choosen_dataset + '/'
     raw_data_train = raw_data_dir + 'train.csv'
     raw_data_val = raw_data_dir + 'devel.csv'
@@ -31,6 +31,8 @@ class Arguments:
     event_dir = result_dir + '/event'
     ckpt_dir = result_dir + '/ckpt'
     embed_dir = result_dir + '/embed'
+    # Test
+    test_ckpt = ckpt_dir + '/biogrut/ckpt_epoch_02.pt'
 
     # Special tokens and corresponding _indexes
     word_pad = ('<pad>', 0)

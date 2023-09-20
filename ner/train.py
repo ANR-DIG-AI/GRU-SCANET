@@ -91,7 +91,7 @@ def run(arg):
             ents = torch.from_numpy(ents).long().to(arg.device)
             loss = model.loss(sens, ents)
             val_acml_loss += loss.item() * val_size
-            
+        
         for sens, ents in test_data.gen_batch(arg.batch_size * 4, shuffle=False):
             val_size = sens.shape[0]
             sens = torch.from_numpy(sens).long().to(arg.device)
@@ -104,9 +104,7 @@ def run(arg):
             y_pred.extend([ent for sen in preds for ent in sen])
             
         val_loss = val_acml_loss / len(val_data)
-        val_f1 = cal_f1score(y_true, y_pred)
         precision, recall, fmeasure = cal_scores(y_true, y_pred)
-        _fmeasure = (2*precision*recall)/(precision + recall)
         tmp_output = '[ITER] : precision, recall, F1-Score ' + str((precision, recall, fmeasure))
         print(tmp_output)
         add_line(file_name='../result/logs/logs.txt', lines=[tmp_output])
