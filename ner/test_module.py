@@ -23,10 +23,9 @@ def read_labels():
         return {}
     
 def adapter(order=0, value=''):
-    print('adapter : ', value)
+    print('adapter : ', order, ' value : ', value)
     expected = {'O': 'O', 'B': 'B'+str(order), 'I': 'I'+str(order)}
     if value in list(expected.values()):
-        print('adapter useless : ', value)
         return value
     return expected[value]
 
