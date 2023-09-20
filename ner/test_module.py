@@ -35,13 +35,16 @@ def run_test(order, test_set, arg):
 
     word2idx = lookup['word2idx']
     entity2idx = lookup['entity2idx']
+    
     idx2entity = {idx: ent for ent, idx in entity2idx.items()}
     o_entity = entity2idx['O']
-
-    test_sens = [ [word2idx[_sen] for _sen in sen] for sen in sens_test] # dataset['sens_test']  
-    test_ents = [[entity2idx[adapter(order=order,value=ent)] for ent in ents] for ents in ents_test]
     arg.num_vocabs = len(word2idx)
     arg.num_entities = len(entity2idx)
+    print('Count of entities : ', arg.num_entities)
+    print(entity2idx)
+    test_sens = [ [word2idx[_sen] for _sen in sen] for sen in sens_test] # dataset['sens_test']  
+    test_ents = [[entity2idx[adapter(order=order,value=ent)] for ent in ents] for ents in ents_test]
+    
     print('Count of entities : ', arg.num_entities)
     model = build_model(arg.model_name, arg).to(arg.device)
 
