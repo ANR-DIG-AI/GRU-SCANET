@@ -23,7 +23,11 @@ def read_labels():
         return {}
     
 def adapter(order=0, value=''):
+    print('adapter : ', value)
     expected = {'O': 'O', 'B': 'B'+str(order), 'I': 'I'+str(order)}
+    if value in list(expected.values()):
+        print('adapter useless : ', value)
+        return value
     return expected[value]
 
 def run_test(order, test_set, arg):
@@ -45,7 +49,6 @@ def run_test(order, test_set, arg):
     test_sens = [ [word2idx[_sen] for _sen in sen] for sen in sens_test] # dataset['sens_test']  
     test_ents = [[entity2idx[adapter(order=order,value=ent)] for ent in ents] for ents in ents_test]
     
-    print('Count of entities : ', arg.num_entities)
     model = build_model(arg.model_name, arg).to(arg.device)
 
     # Load existed weights
