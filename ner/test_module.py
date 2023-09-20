@@ -23,7 +23,6 @@ def read_labels():
         return {}
     
 def adapter(order=0, value=''):
-    print('adapter : ', order, ' value : ', value)
     expected = {'O': 'O', 'B': 'B'+str(order), 'I': 'I'+str(order)}
     if value in list(expected.values()):
         return value
@@ -39,8 +38,8 @@ def run_test(order, test_set, arg):
     word2idx = lookup['word2idx']
     entity2idx = lookup['entity2idx']
     
-    idx2entity = {idx: ent for ent, idx in entity2idx.items()}
-    o_entity = entity2idx['O']
+    # idx2entity = {idx: ent for ent, idx in entity2idx.items()}
+    # o_entity = entity2idx['O']
     arg.num_vocabs = len(word2idx)
     arg.num_entities = len(entity2idx)
     print('Count of entities : ', arg.num_entities)

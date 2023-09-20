@@ -24,7 +24,7 @@ if __name__ == '__main__':
     for i in range(len(tests)) :
         test_set = tests[i]
         _label = labels[test_set]
-        test_set = arg.raw_data_test.replace('//','/'+test_set+'/')
+        test_set = arg.raw_data_test.replace('/LLM/','/'+test_set+'/')
         out = 'Dataset ' + test_set + ' has started 0% !'
         print(out)
         run_test(_label,test_set, arg)
