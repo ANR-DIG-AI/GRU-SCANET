@@ -28,7 +28,7 @@ def adapter(order=0, value=''):
         return value
     return expected[value]
 
-def run_test(order, test_set, arg):
+def run_test(order, test_set, arg, model):
     sens_test, ents_test = DataProcessing.read_csv(test_set)
     
     print('Look up', arg.lookup_path)
@@ -46,12 +46,6 @@ def run_test(order, test_set, arg):
     print(entity2idx)
     test_sens = [ [word2idx[_sen] for _sen in sen] for sen in sens_test] # dataset['sens_test']  
     test_ents = [[entity2idx[adapter(order=order,value=ent)] for ent in ents] for ents in ents_test]
-    
-    model = build_model(arg.model_name, arg).to(arg.device)
-
-    # Load existed weights
-    if os.path.exists(arg.test_ckpt):
-        model.load_state_dict(torch.load(arg.test_ckpt))
 
     y_true, y_pred = [], []
 
@@ -66,7 +60,7 @@ def run_test(order, test_set, arg):
     y_true_flatten = sum(y_true, [])
     y_pred_flatten = sum(y_pred, [])
     precision, recall, fmeasure = cal_scores(y_true_flatten, y_pred_flatten)
-    tmp_output = '[ITER] : precision, recall, F1-Score ' + str((precision, recall, fmeasure))
+    tmp_output = '[TEST] : precision, recall, F1-Score ' + str((precision, recall, fmeasure))
     print(tmp_output)
     add_line(file_name='../result/logs/logs.txt', lines=[tmp_output])
     
