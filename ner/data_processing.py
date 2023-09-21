@@ -95,7 +95,7 @@ class DataProcessingMaster:
         sens_test, ents_test = DataProcessing.read_csv(arg.raw_data_test) #, is_test=True)
 
         # load tokenizer BioBert
-        whole_world_corpora = ExtractFeatureData(input_path='').get_tokens()
+        whole_world_corpora = [] # ExtractFeatureData(input_path='').get_tokens()
 
         # whole_world_corpora = DataProcessing.read_text_file(arg.whole_world_corpora)
         print("Total count of tokens :", len(whole_world_corpora))
