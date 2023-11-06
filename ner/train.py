@@ -7,12 +7,14 @@ from torch.utils.tensorboard import SummaryWriter
 
 import random
 import numpy as np
-from module import build_model, EarlyStopping, cal_f1score, DataLoader, load_embeddings, cal_scores
+from module import build_model, EarlyStopping, DataLoader, load_embeddings, cal_scores
+
 
 def add_line(file_name, lines=[]):
     with open(file_name, 'a') as f:
         for line in lines:
             f.write(line + '\n')
+
 
 def run(arg):
 
@@ -35,7 +37,7 @@ def run(arg):
     train_ents = dataset['ents_train']
     val_sens = dataset['sens_val']
     val_ents = dataset['ents_val']
-    
+
     test_sens = dataset['sens_test']
     test_ents = dataset['ents_test']
 
@@ -51,11 +53,13 @@ def run(arg):
     arg.num_entities = len(entity2idx)
 
     model = build_model(arg.model_name, arg).to(arg.device)
-    optimizer = optim.Adam(model.parameters(), lr=arg.lr, weight_decay=arg.weight_decay)
+    optimizer = optim.Adam(model.parameters(), lr=arg.lr,
+                           weight_decay=arg.weight_decay)
     lr_decay = optim.lr_scheduler.ReduceLROnPlateau(optimizer, 'min', factor=arg.lr_decay_factor, verbose=True,
                                                     patience=0, min_lr=arg.min_lr)
     # Train
-    add_line(file_name='../result/logs/logs.txt', lines=['Model: ' + arg.model_name])
+    add_line(file_name='../result/logs/logs.txt',
+             lines=['Model: ' + arg.model_name])
     print('Model: {}\nStart training'.format(arg.model_name))
     finished_batch = 0
     num_parameters = sum(p.numel() for p in model.parameters())
@@ -73,17 +77,20 @@ def run(arg):
 
             if i % 10 == 0:
                 pass
-                
+
         # Save model
-        torch.save(model.state_dict(), os.path.join(ckpt_dir, 'ckpt_epoch_{:02d}.pt'.format(epoch)))
-        if os.path.exists(os.path.join(ckpt_dir, 'ckpt_epoch_{:02d}.pt'.format(epoch - arg.patience - 1))):
-            os.remove(os.path.join(ckpt_dir, 'ckpt_epoch_{:02d}.pt'.format(epoch - arg.patience - 1)))
+        model_file = arg.choosen_dataset + '_ckpt_epoch_{:02d}.pt'
+        torch.save(model.state_dict(), os.path.join(
+            ckpt_dir, model_file.format(epoch)))
+        if os.path.exists(os.path.join(ckpt_dir, model_file.format(epoch - arg.patience - 1))):
+            os.remove(os.path.join(
+                ckpt_dir, model_file.format(epoch - arg.patience - 1)))
 
         # Validate per epoch
         model.eval()
 
         y_true, y_pred = [], []  # true entities, predicted entities
-        val_acml_loss = 0 
+        val_acml_loss = 0
 
         for sens, ents in val_data.gen_batch(arg.batch_size * 4, shuffle=False):
             val_size = sens.shape[0]
@@ -91,7 +98,7 @@ def run(arg):
             ents = torch.from_numpy(ents).long().to(arg.device)
             loss = model.loss(sens, ents)
             val_acml_loss += loss.item() * val_size
-        
+
         for sens, ents in test_data.gen_batch(arg.batch_size * 4, shuffle=False):
             val_size = sens.shape[0]
             sens = torch.from_numpy(sens).long().to(arg.device)
@@ -100,13 +107,22 @@ def run(arg):
             _, preds = model(sens, ents)
             targets = ents.cpu().detach().numpy()
 
-            y_true.extend([ent for sen in targets for ent in sen if ent != arg.entity_pad[1]])
+            y_true.extend(
+                [ent for sen in targets for ent in sen if ent != arg.entity_pad[1]])
             y_pred.extend([ent for sen in preds for ent in sen])
-            
+
         val_loss = val_acml_loss / len(val_data)
-        precision, recall, fmeasure = cal_scores(y_true, y_pred)
-        tmp_output = '[ITER] : precision, recall, F1-Score ' + str((precision, recall, fmeasure))
+        precision, recall, fmeasure = cal_scores(
+            y_true, y_pred, metric='micro')
+        tmp_output = '[ITER-micro] : precision, recall, F1-Score ' + \
+            str((precision, recall, fmeasure))
         print(tmp_output)
+        precision, recall, fmeasure = cal_scores(
+            y_true, y_pred, metric='weighted')
+        tmp_output = '[ITER-weighted] : precision, recall, F1-Score ' + \
+            str((precision, recall, fmeasure))
+        print(tmp_output)
+
         add_line(file_name='../result/logs/logs.txt', lines=[tmp_output])
         lr_decay.step(val_loss)
     print('Done')

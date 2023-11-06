@@ -57,32 +57,37 @@ def cal_accuracy(predicts, targets, ignore_index=None):
 
     if ignore_index is not None:
         valid = targets != ignore_index
-        predicts = predicts[valid]  # would be flattened and with valid positions chosen (*)
-        targets = targets[valid]  # would be flattened and with valid positions chosen (*)
+        # would be flattened and with valid positions chosen (*)
+        predicts = predicts[valid]
+        # would be flattened and with valid positions chosen (*)
+        targets = targets[valid]
 
     return np.sum(predicts == targets) / predicts.size
 
 
-def cal_f1score(y_true, y_pred):
-    """Calculate mean f1 score by using scikit-learn package
+# def cal_f1score(y_true, y_pred):
+#     """Calculate mean f1 score by using scikit-learn package
 
-    Args:
-        y_true (list): list of true tags
-        y_pred (list): list of predicted tags
+#     Args:
+#         y_true (list): list of true tags
+#         y_pred (list): list of predicted tags
 
-    Returns:
-        (int): mean f1 score
-    """
-    return f1_score(y_true, y_pred, average='micro')
+#     Returns:
+#         (int): mean f1 score
+#     """
+#     return f1_score(y_true, y_pred, average='micro')
 
-def cal_scores(y_true, y_pred):
-    precision = precision_score(y_true, y_pred, average='micro') # weighted
 
-    recall = recall_score(y_true, y_pred, average='micro')
+def cal_scores(y_true, y_pred, metric=''):
+    precision = precision_score(
+        y_true, y_pred, average=metric)  # weighted
 
-    f1 = f1_score(y_true, y_pred, average='micro')
+    recall = recall_score(y_true, y_pred, average=metric)
+
+    f1 = f1_score(y_true, y_pred, average=metric)
 
     return (precision, recall, f1)
+
 
 def pad_seq(sequences, max_len=None, batch_first=True, padding_value=0):
     """Pad a list of variable length ndarrays with padding_value
@@ -102,14 +107,16 @@ def pad_seq(sequences, max_len=None, batch_first=True, padding_value=0):
     sample_size = sequences[0].shape
     trailing_dims = sample_size[1:]
 
-    max_len = max_len if max_len is not None else max([s.shape[0] for s in sequences])
+    max_len = max_len if max_len is not None else max(
+        [s.shape[0] for s in sequences])
 
     if batch_first:
         out_dims = (len(sequences), max_len) + trailing_dims
     else:
         out_dims = (max_len, len(sequences)) + trailing_dims
 
-    out_array = np.full(out_dims, fill_value=padding_value, dtype=sequences[0].dtype)
+    out_array = np.full(out_dims, fill_value=padding_value,
+                        dtype=sequences[0].dtype)
 
     for i, seq in enumerate(sequences):
         seq_len = len(seq)
@@ -134,7 +141,8 @@ def decode_entity(x, mask):
     first_invalid = mask.sum(1)  # (B,)
 
     preds = x.argmax(dim=-1)  # (B, T)
-    path = [preds[i].data[:first_invalid[i].item()].tolist() for i in range(preds.shape[0])]  # (B, *)
+    path = [preds[i].data[:first_invalid[i].item()].tolist()
+            for i in range(preds.shape[0])]  # (B, *)
     return path
 
 
