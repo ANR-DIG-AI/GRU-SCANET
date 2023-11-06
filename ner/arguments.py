@@ -4,22 +4,22 @@ class Arguments:
     """
 
     # Device
-    device = 'cpu' # cuda
+    device = 'cpu'  # cuda
 
     # Path
-    
+
     gold_data_dir = '../data/datasets/'
     gold_data_train = 'train.tsv'
     gold_data_train_dev = 'train_dev.tsv'
     gold_data_val = 'devel.tsv'
     gold_data_test = 'test.tsv'
-    
-    choosen_dataset = 'BC2GM'
+
+    choosen_dataset = 'LLM'  # 'BC2GM'
     raw_data_dir = '../data/processed/' + choosen_dataset + '/'
     raw_data_train = raw_data_dir + 'train.csv'
     raw_data_val = raw_data_dir + 'devel.csv'
     raw_data_test = raw_data_dir + 'test.csv'
-    
+
     whole_world_corpora = '../data/corpus/to_process/'
 
     data_dir = '../data/pkl/'
@@ -31,6 +31,8 @@ class Arguments:
     event_dir = result_dir + '/event'
     ckpt_dir = result_dir + '/ckpt'
     embed_dir = result_dir + '/embed'
+    # Test
+    test_ckpt = ckpt_dir + '/biogrut/ckpt_epoch_02.pt'
 
     # Special tokens and corresponding _indexes
     word_pad = ('<pad>', 0)
@@ -51,22 +53,21 @@ class Arguments:
     # Model Common Part
     num_vocabs = None  # set automatically
     num_entities = None  # set automatically
-    embed_dim = 128  # embedding size 
+    embed_dim = 128  # embedding size
     model_dim = 256
 
     # Early Stop
     min_delta = 0.
     patience = 6
 
+
 class TransformerCRFArguments(Arguments):
     model_name = 'biogrut'
 
     attention_type = 'scaled_dot'
-    num_blocks = 1 
+    num_blocks = 1
     num_heads = 4
     ff_hidden_dim = 512
     dropout_rate = 0.2
 
     gru_hidden_dim = Arguments.model_dim // 2
-
-    
