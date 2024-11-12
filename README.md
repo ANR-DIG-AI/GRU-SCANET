@@ -12,7 +12,7 @@ Prerequisites :
 
 # To evaluate GRU-SCANET without MHA : 
 
-    comment the line 99 of the file module/model.py and re-run the previous command.
+    apply the comment on line 138 of the file module/model.py and re-run the previous command.
 
 # Show results : 
 
