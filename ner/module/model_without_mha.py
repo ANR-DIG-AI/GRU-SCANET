@@ -135,8 +135,7 @@ class TransformerGRUAttnCRF(TransformerBase):
         x, _ = self.gru(x)  # x (B, T, 2 * D/2)
 
         for i in range(self.num_blocks):
-            x, _ = self.__getattr__('multihead_attn_{}'.format(i))(
-                x, x, x, attn_mask=attn_mask)  # (B, T, D)
+            # x, _ = self.__getattr__('multihead_attn_{}'.format(i))(x, x, x, attn_mask=attn_mask)  # (B, T, D)
             x = self.__getattr__('feedforward_{}'.format(i))(x)  # (B, T, D)
 
         x = self.fc(x)  # x is now emission matrix (B, T, num_entities)

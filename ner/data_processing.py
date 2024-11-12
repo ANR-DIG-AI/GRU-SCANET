@@ -287,11 +287,11 @@ class DataProcessingTrans:
             pickle.dump(padded, fout)
 
 
-# if __name__ == '__main__':
-#     def arg_manager():
-#         parser = argparse.ArgumentParser()
-#         parser.add_argument("--choosen_dataset", type=str,
-#                             default="processed_1")
-#         return parser.parse_args()
-#     args = arg_manager()
-#     DataProcessingTrans(dataset=args.choosen_dataset)
+if __name__ == '__main__':
+    def arg_manager():
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--choosen_dataset", type=str,
+                            default="processed_1")
+        return parser.parse_args()
+    args = arg_manager()
+    DataProcessingTrans(dataset=args.choosen_dataset)

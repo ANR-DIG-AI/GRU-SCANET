@@ -117,6 +117,7 @@ def run(arg):
         tmp_output = '[ITER-micro] : precision, recall, F1-Score ' + \
             str((precision, recall, fmeasure))
         print(tmp_output)
+        add_line(file_name='../result/logs/logs.txt', lines=[tmp_output])
         precision, recall, fmeasure = cal_scores(
             y_true, y_pred, metric='weighted')
         tmp_output = '[ITER-weighted] : precision, recall, F1-Score ' + \
