@@ -43,8 +43,8 @@ class Arguments:
 
     # Train
     finished_epoch = 0
-    # num_epochs = 100
-    batch_size = 64
+    num_epochs = 2
+    batch_size = 32  # 64
     weight_decay = 0.001
     lr = 1e-3
     min_lr = 5e-5
@@ -53,8 +53,8 @@ class Arguments:
     # Model Common Part
     num_vocabs = None  # set automatically
     num_entities = None  # set automatically
-    embed_dim = 128  # embedding size
-    model_dim = 256
+    embed_dim = 256  # 128  # embedding size
+    model_dim = 512  # 256
 
     # Early Stop
     min_delta = 0.

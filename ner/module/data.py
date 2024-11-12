@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from .token_tagger import SentenceTokenTagger
 
 
 class DataProcessing:
@@ -24,11 +25,19 @@ class DataProcessing:
         entity = df['NER'].tolist()
 
         if is_test:
-            return [s.split() for s in sentence], None
+            tokens, _ = SentenceTokenTagger(
+                sentence, None).tokenize_sequence()
+            return tokens, None
+            # return [s.split() for s in sentence], None
         else:
-            sens = [s.split() for s in sentence]
-            ents = [e.split() for e in entity]
-
+            # sens = [s.split() for s in sentence]
+            # ents = [e.split() for e in entity]
+            sens = []
+            ents = []
+            for se, en in zip(sentence, entity):
+                tokens, tags = SentenceTokenTagger(se, en).run()
+                sens.append(tokens)
+                ents.append(tags)
             for se, en in zip(sens, ents):
                 assert len(se) == len(en)
 
@@ -44,7 +53,7 @@ class DataProcessing:
         except FileNotFoundError:
             print("The specified file was not found.")
             return []
-        
+
     @staticmethod
     def build_lookup(tokens, **extra_signs):
         """Build lookup table for given tokens and possible extra signs
@@ -60,7 +69,8 @@ class DataProcessing:
         lookup = {sign: idx for sign, idx in extra_signs.items()}
         for token in tokens:
             if token in lookup.keys():
-                raise KeyError('Duplicate token {} found in tokens or extra_signs'.format(token))
+                raise KeyError(
+                    'Duplicate token {} found in tokens or extra_signs'.format(token))
 
             lookup[token] = len(lookup)
 
