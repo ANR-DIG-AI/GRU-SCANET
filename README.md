@@ -5,7 +5,7 @@ Prerequisites :
 
     - Go to this page to install pytorch : https://pytorch.org/get-started/locally/
     - Clone the code
-    - download the pre-processed data at `[Data Link](https://drive.google.com/file/d/1vPMGqSp9sk8-eiVzjSUkfzCdfnjU8bx0/view?usp=sharing)`
+# Download the data to replace the existing ones at [Data Link](https://drive.google.com/file/d/1vPMGqSp9sk8-eiVzjSUkfzCdfnjU8bx0/view?usp=sharing)
 # GRU-SCANET :
 
    `$ sh ./job.sh `
