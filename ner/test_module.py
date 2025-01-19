@@ -6,6 +6,7 @@ import torch
 from train import add_line
 from module import build_model, EarlyStopping, DataLoader, load_embeddings, cal_scores
 import json
+from ner.module.token_tagger import SentenceTokenTagger
 
 
 def read_labels():
@@ -37,8 +38,8 @@ def run_test(order, test_set, arg, model, lookup):
     entity2idx = lookup['entity2idx']
     # idx2entity = {idx: ent for ent, idx in entity2idx.items()}
     # o_entity = entity2idx['O']
-    print('Count of entities : ', arg.num_entities)
-    print(entity2idx)
+    # print('Count of entities : ', arg.num_entities)
+    # print(entity2idx)
     test_sens = [[word2idx[_sen] for _sen in sen]
                  for sen in sens_test]  # dataset['sens_test']
     test_ents = [[entity2idx[adapter(order=order, value=ent)]
@@ -62,3 +63,23 @@ def run_test(order, test_set, arg, model, lookup):
         str((precision, recall, fmeasure))
     print(tmp_output)
     add_line(file_name='../result/logs/logs.txt', lines=[tmp_output])
+
+
+def run_real(text_input, labels, arg, model, lookup):
+    sentence_tokens = []
+    sen_tokens, _ = SentenceTokenTagger(text_input, []).run()
+    sentence_tokens.append(sen_tokens)
+
+    word2idx = lookup['word2idx']
+    sentence_tokens = [[word2idx[_sen] for _sen in sen]
+                       for sen in sentence_tokens]
+    y_pred = []
+    model.eval()
+    for sentence in sentence_tokens:
+        x = torch.tensor(sentence, dtype=torch.long).unsqueeze(
+            0).to(arg.device)
+        _, pred_s = model(x)
+
+    y_pred.append([adapter(order=labels, value=ent)
+                  for ent in pred_s[0].item()])
+    print(y_pred)
