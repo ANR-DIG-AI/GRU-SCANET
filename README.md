@@ -37,6 +37,15 @@ To train the GRU-SCANET model on the provided datasets:
 
     sh ./job.sh
 
+### To evaluate GRU-SCANET without MHA : 
+
+    apply the comment on line 138 of the file module/model.py and re-run the previous command.
+
+### Show results : 
+
+    Open /result/logs/logs.txt to get results of the evaluations.
+
+
 ### Testing
 To evaluate the trained model on a single text value:
 
