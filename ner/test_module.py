@@ -78,7 +78,9 @@ def run_real(text_input, labels, arg, model, lookup):
     for sentence in sentence_tokens:
         x = torch.tensor(sentence, dtype=torch.long).unsqueeze(
             0).to(arg.device)
-        _, pred_s = model(x)
+        y = torch.tensor([0 for _ in sentence],
+                         dtype=torch.long).unsqueeze(0).to(arg.device)
+        _, pred_s = model(x, y)
 
     y_pred.append([adapter(order=labels, value=ent)
                   for ent in pred_s[0].item()])
