@@ -1,4 +1,4 @@
-# GRU-SCANET: Named Entity Recognition Architecture
+# GRU-SCANET: Named Entity Recognition Architecture :star2:
 
 GRU-SCANET is a state-of-the-art architecture for Named Entity Recognition (NER) that combines several advanced techniques to achieve high performance. Its design includes:
 - **Positional Encoding**: To capture the position of tokens within a sequence.
